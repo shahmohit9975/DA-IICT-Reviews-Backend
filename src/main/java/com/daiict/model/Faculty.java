@@ -13,11 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Faculty {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length = 10)
+	@Column(unique = true, length = 10)
 	private int faculty_id;
 	@Column(nullable = false, length = 50)
 	private String faculty_name;
@@ -25,13 +27,12 @@ public class Faculty {
 	private String faculty_contact_no;
 	@Column(nullable = false, length = 25)
 	private String faculty_email_id;
-	@JoinColumn(name = "faculty_id")
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "faculty")
 	private Set<Internship> internship;
 
-	public Set<Internship> getInternship() {
-		return internship;
-	}
+//	public Set<Internship> getInternship() {
+//		return internship;
+//	}
 
 	public void setInternship(Set<Internship> internship) {
 		this.internship = internship;
@@ -68,5 +69,11 @@ public class Faculty {
 	public void setFaculty_email_id(String faculty_email_id) {
 		this.faculty_email_id = faculty_email_id;
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Faculty [faculty_id=" + faculty_id + ", faculty_name=" + faculty_name + ", faculty_contact_no="
+//				+ faculty_contact_no + ", faculty_email_id=" + faculty_email_id + ", internship=" + internship + "]";
+//	}
 
 }

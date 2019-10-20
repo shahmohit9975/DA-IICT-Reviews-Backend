@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Internship_type {
 
@@ -24,13 +26,12 @@ public class Internship_type {
 	private String internship_type_name;
 	@Column(nullable = false, length = 10)
 	private int internship_type_duration;
-	@JoinColumn(name = "internship_type_id")
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "internship_type")
 	private Set<Internship> internship;
 
-	public Set<Internship> getInternship() {
-		return internship;
-	}
+//	public Set<Internship> getInternship() {
+//		return internship;
+//	}
 
 	public void setInternship(Set<Internship> internship) {
 		this.internship = internship;
@@ -59,5 +60,12 @@ public class Internship_type {
 	public void setInternship_type_duration(int internship_type_duration) {
 		this.internship_type_duration = internship_type_duration;
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Internship_type [internship_type_id=" + internship_type_id + ", internship_type_name="
+//				+ internship_type_name + ", internship_type_duration=" + internship_type_duration + ", internship="
+//				+ internship + "]";
+//	}
 
 }

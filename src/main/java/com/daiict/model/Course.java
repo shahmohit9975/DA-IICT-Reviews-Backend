@@ -16,6 +16,8 @@ import javax.persistence.Table;
 
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Course {
 	@Id
@@ -31,8 +33,7 @@ public class Course {
 	private int course_strength;
 	@Column(nullable = false)
 	private boolean course_status;
-	@JoinColumn(name = "course_id")
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "course")
 	private Set<Student> students;
 
 	public int getCourse_id() {
@@ -74,13 +75,20 @@ public class Course {
 	public void setCourse_status(boolean course_status) {
 		this.course_status = course_status;
 	}
-
-	public Set<Student> getStudents() {
-		return students;
-	}
+//
+//	public Set<Student> getStudents() {
+//		return students;
+//	}
 
 	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Course [course_id=" + course_id + ", course_name=" + course_name + ", course_duration="
+//				+ course_duration + ", course_strength=" + course_strength + ", course_status=" + course_status
+//				+ ", students=" + students + "]";
+//	}
 
 }

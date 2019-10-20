@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Features {
 
@@ -62,4 +64,11 @@ public class Features {
 	public void setIs_admin(boolean is_admin) {
 		this.is_admin = is_admin;
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Features [feature_id=" + feature_id + ", feature_name=" + feature_name + ", feature_route="
+//				+ feature_route + ", is_student=" + is_student + ", is_admin=" + is_admin + "]";
+//	}
+
 }

@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Admin {
 
@@ -24,8 +26,7 @@ public class Admin {
 	private String admin_name;
 	@Column(nullable = false, length = 20)
 	private String admin_role;
-	@JoinColumn(name = "admin_id")
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "admin")
 	private Set<Review> review;
 
 	public int getAdmin_id() {
@@ -52,12 +53,18 @@ public class Admin {
 		this.admin_role = admin_role;
 	}
 
-	public Set<Review> getReview() {
-		return review;
-	}
+//	public Set<Review> getReview() {
+//		return review;
+//	}
 
 	public void setReview(Set<Review> review) {
 		this.review = review;
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Admin [admin_id=" + admin_id + ", admin_name=" + admin_name + ", admin_role=" + admin_role + ", review="
+//				+ review + "]";
+//	}
 
 }

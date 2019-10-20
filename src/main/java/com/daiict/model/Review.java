@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,12 +17,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
-@Table(name = "review")
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length = 10)
+	@Column(unique = true, length = 10)
 	@PrimaryKeyJoinColumn
 	private int review_id;
 	@Column(nullable = false, length = 100)
@@ -43,8 +45,12 @@ public class Review {
 //	@JoinColumn(name = "admin_id")
 //	private Admin admin_id;
 	@JoinColumn(name = "internship_id")
-	@OneToOne(targetEntity = Internship.class, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, targetEntity = Internship.class, cascade = CascadeType.ALL)
 	private Internship internship;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "admin_id")
+	private Admin admin;
 
 	public int getReview_id() {
 		return review_id;
@@ -95,6 +101,7 @@ public class Review {
 	}
 
 	public Enum_rating getRating() {
+
 		return rating;
 	}
 
@@ -124,6 +131,21 @@ public class Review {
 
 	public void setInternship(Internship internship) {
 		this.internship = internship;
+	}
+
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	@Override
+	public String toString() {
+		return "Review [review_id=" + review_id + ", review_title=" + review_title + ", review_descri=" + review_descri
+				+ ", review_status=" + review_status + ", pros=" + pros + ", cons=" + cons + ", rating=" + rating
+				+ ", review_date=" + review_date + ", internship=" + internship + ", admin=" + admin + "]";
 	}
 
 }

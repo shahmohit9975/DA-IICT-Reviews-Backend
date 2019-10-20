@@ -13,12 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Companies {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length = 10)
+	@Column(unique = true, length = 10)
 	private int company_id;
 	@Column(nullable = false, length = 25)
 	private String company_name1;
@@ -26,13 +28,12 @@ public class Companies {
 	private String company_name2;
 	@Column(nullable = false, length = 25)
 	private String company_url;
-	@JoinColumn(name = "company_id")
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "companies")
 	private Set<Internship> internship;
 
-	public Set<Internship> getInternship() {
-		return internship;
-	}
+//	public Set<Internship> getInternship() {
+//		return internship;
+//	}
 
 	public void setInternship(Set<Internship> internship) {
 		this.internship = internship;
@@ -69,5 +70,11 @@ public class Companies {
 	public void setCompany_url(String company_url) {
 		this.company_url = company_url;
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Companies [company_id=" + company_id + ", company_name1=" + company_name1 + ", company_name2="
+//				+ company_name2 + ", company_url=" + company_url + ", internship=" + internship + "]";
+//	}
 
 }

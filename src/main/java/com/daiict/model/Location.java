@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Location {
 
@@ -22,13 +24,12 @@ public class Location {
 	private int location_id;
 	@Column(nullable = false, length = 25)
 	private String location_name;
-	@JoinColumn(name = "location_id")
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "location")
 	private Set<Internship> internship;
 
-	public Set<Internship> getInternship() {
-		return internship;
-	}
+//	public Set<Internship> getInternship() {
+//		return internship;
+//	}
 
 	public void setInternship(Set<Internship> internship) {
 		this.internship = internship;
@@ -49,5 +50,11 @@ public class Location {
 	public void setLocation_name(String location_name) {
 		this.location_name = location_name;
 	}
+
+//	@Override
+//	public String toString() {
+//		return "Location [location_id=" + location_id + ", location_name=" + location_name + ", internship="
+//				+ internship + "]";
+//	}
 
 }

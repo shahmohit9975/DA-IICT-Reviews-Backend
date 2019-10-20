@@ -2,6 +2,7 @@ package com.daiict.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Feedback {
 
@@ -25,6 +28,9 @@ public class Feedback {
 	private String feedback_descri;
 	@Column(nullable = false, length = 200)
 	private String feedback_file;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "student_id")
+	private Student student;
 
 	public int getFeedback_id() {
 		return feedback_id;
@@ -34,9 +40,9 @@ public class Feedback {
 		this.feedback_id = feedback_id;
 	}
 
-//	public Student getStudent() {
-//		return student;
-//	}
+	public Student getStudent() {
+		return student;
+	}
 //
 //	public void setStudent(Student student) {
 //		this.student = student;
@@ -64,6 +70,20 @@ public class Feedback {
 
 	public void setFeedback_file(String feedback_file) {
 		this.feedback_file = feedback_file;
+	}
+
+//	public Student getStudent() {
+//		return student;
+//	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	@Override
+	public String toString() {
+		return "Feedback [feedback_id=" + feedback_id + ", feedback_title=" + feedback_title + ", feedback_descri="
+				+ feedback_descri + ", feedback_file=" + feedback_file + ", student=" + student + "]";
 	}
 
 }
