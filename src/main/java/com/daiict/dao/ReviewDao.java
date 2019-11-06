@@ -1,6 +1,7 @@
 package com.daiict.dao;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.hibernate.annotations.Sort;
@@ -16,6 +17,7 @@ import com.daiict.repository.AdminRepo;
 import com.daiict.repository.InternShipRepo;
 import com.daiict.repository.ReviewRepo;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Service
 public class ReviewDao {
@@ -54,33 +56,12 @@ public class ReviewDao {
 		return reviewRepo.getAllReviewsByCompanyIdAndDateDescendsingOrder(company_id);
 	}
 
-	public String updateReviewStatus(int review_id, int admin_id, int review_status) {
+	public String updateReviewStatus(int review_id, String admin_id, int review_status) {
 
-		try {
-
-			if (adminRepo.findById(admin_id) != null) {
-
-			} else {
-				return "admin id " + admin_id + " is not valid";
-			}
-		} catch (Exception e) {
-
-			return e.getMessage() + " \t " + "admin id " + admin_id + " is not valid";
-		}
-		try {
-
-			if (reviewRepo.findById(review_id) != null) {
-
-			} else {
-				return "review id " + review_id + " is not valid";
-			}
-		} catch (Exception e) {
-
-			return e.getMessage() + " \t " + "review id " + review_id + " is not valid";
-		}
-
-		Admin admin = adminRepo.getOne(admin_id);
-		Review review = reviewRepo.getOne(review_id);
+		Admin admin = adminRepo.findById(admin_id)
+				.orElseThrow(() -> new ResourceNotFoundException("admin id " + admin_id + " is not valid"));
+		Review review = reviewRepo.findById(review_id)
+				.orElseThrow(() -> new ResourceNotFoundException("review id" + review_id + " is not valid"));
 
 		review.setAdmin(admin);
 		review.setReview_status(review_status == 1 ? true : false);
@@ -105,22 +86,22 @@ public class ReviewDao {
 	public String addReview(int internship_id, String jsonObject) {
 		Review review = null;
 		try {
-			review = new Gson().fromJson(jsonObject, Review.class);
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+			review = gson.fromJson(jsonObject, Review.class);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
-		try {
 
-			if (internShipRepo.findById(internship_id) != null) {
-				Internship internship = internShipRepo.getOne(internship_id);
-				review.setInternship(internship);
-				reviewRepo.save(review);
-				return "added";
-			}
+		Internship internship = internShipRepo.findById(internship_id)
+				.orElseThrow(() -> new ResourceNotFoundException("internship id " + internship_id + " is not valid"));
+		review.setInternship(internship);
+		reviewRepo.save(review);
+		return "added";
 
-		} catch (Exception e) {
-			return e.getMessage();
-		}
-		return "internship id is not valid";
+	}
+
+	public List<Map<Object, Object>> getAllStudentEmailIdForReminder() {
+
+		return reviewRepo.getAllStudentEmailIdForReminder();
 	}
 }

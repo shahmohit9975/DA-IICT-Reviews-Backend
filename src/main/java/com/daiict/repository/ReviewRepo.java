@@ -40,6 +40,9 @@ public interface ReviewRepo extends JpaRepository<Review, Integer> {
 	void updateReviewStatus(@Param("review_id") int review_id, @Param("admin_id") int admin_id,
 			@Param("review_status") int review_status);
 
+	@Query(value = " SELECT stu.student_id from student as stu join internship as intern on(stu.student_id=intern.student_id) WHERE intern.internship_id not in(SELECT rev.internship_id from review as rev)", nativeQuery = true)
+	List<Map<Object, Object>> getAllStudentEmailIdForReminder();
+
 //	@Modifying
 //	@Transactional
 //	@Query(value = "UPDATE SAMPLE_TABLE st SET st.status=:flag WHERE se.referenceNo in :ids")

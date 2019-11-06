@@ -15,21 +15,26 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class Student {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length = 10)
-	private int student_id;
+	@NotNull(message = "Please provide a student_id as string")
+	@Column
+	private String student_id;
+	@NotNull(message = "Please provide a student_name as string")
 	@Column(nullable = false, length = 20)
 	private String student_name;
+	@NotNull(message = "Please provide a student_contact_number as string")
 	@Column(nullable = false, length = 11)
 	private String student_contact_number;
 //	@JoinColumn(name = "course_id")
@@ -56,11 +61,11 @@ public class Student {
 		this.internship = internship;
 	}
 
-	public int getStudent_id() {
+	public String getStudent_id() {
 		return student_id;
 	}
 
-	public void setStudent_id(int student_id) {
+	public void setStudent_id(String student_id) {
 		this.student_id = student_id;
 	}
 

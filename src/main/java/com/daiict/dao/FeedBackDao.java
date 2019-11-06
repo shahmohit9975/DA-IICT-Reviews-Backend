@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.daiict.model.Feedback;
@@ -24,7 +25,7 @@ public class FeedBackDao {
 	@Autowired
 	StudentRepo studentRepo;
 
-	public String addFeedBack(int student_id, String string) {
+	public String addFeedBack(String student_id, String string) {
 		Feedback feedback = null;
 		Set<Feedback> hsFeedback = new HashSet<Feedback>();
 		try {
@@ -32,24 +33,26 @@ public class FeedBackDao {
 		} catch (Exception e) {
 			return e.getMessage();
 		}
-		try {
+//		try {
 
-			if (studentRepo.findById(student_id) != null) {
-				Student student = studentRepo.getOne(student_id);
-				hsFeedback.add(feedback);
-				student.setFeedback(hsFeedback);
-				studentRepo.save(student);
-				feedback.setStudent(student);
-				feedBackRepo.save(feedback);
-				System.out.println(student.toString());
-				System.out.println(feedback.toString());
-				return "added";
-			}
+		Student student = studentRepo.findById(student_id)
+				.orElseThrow(() -> new ResourceNotFoundException("Student id " + student_id + " is not valid"));
+//			if (studentRepo.findById(student_id) != null) {
+//				Student student = studentRepo.getOne(student_id);
+		hsFeedback.add(feedback);
+		student.setFeedback(hsFeedback);
+//		studentRepo.save(student);
+		feedback.setStudent(student);
+		feedBackRepo.save(feedback);
+//		System.out.println(student.toString());
+//		System.out.println(feedback.toString());
+		return "added";
+//			}
 
-		} catch (Exception e) {
-			return e.getMessage();
-		}
-		return "student id is not valid";
+//		} catch (Exception e) {
+//			return e.getMessage();
+//		}
+//		return "student id is not valid";
 	}
 
 	public List<Feedback> getAllFeedback() {

@@ -52,18 +52,24 @@ public class ReviewController {
 		return reviewdao.getAllReviewsByCompanyId(company_id);
 	}
 
+	@GetMapping("/review/student/getEmail")
+	public List<Map<Object, Object>> getAllStudentEmailIdForReminder() {
+
+		return reviewdao.getAllStudentEmailIdForReminder();
+	}
+
 	@PutMapping(path = "/review/{review_id}", consumes = { "application/json" })
 	public String ReviewUpdateByAdmin(@PathVariable("review_id") int review_id, @RequestBody String review) {
 
 		Object obj = JSONValue.parse(review);
 		JSONObject jsonObject = (JSONObject) obj;
 
-		long long_admin_id = (long) jsonObject.get("admin_id");
+//		String long_admin_id = (String) jsonObject.get("admin_id");
 		long long_review_status = (long) jsonObject.get("review_status");
 
-		int admin_id = Integer.parseInt(String.valueOf(long_admin_id));
+		String admin_id = (String) jsonObject.get("admin_id");
 		int review_status = Integer.parseInt(String.valueOf(long_review_status));
-		
+
 		return reviewdao.updateReviewStatus(review_id, admin_id, review_status);
 	}
 

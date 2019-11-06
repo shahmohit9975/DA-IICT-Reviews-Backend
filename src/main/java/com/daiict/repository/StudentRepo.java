@@ -6,6 +6,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import com.daiict.model.Student;
 
 @RepositoryRestResource(collectionResourceRel = "student", path = "student")
-public interface StudentRepo extends JpaRepository<Student, Integer> {
+public interface StudentRepo extends JpaRepository<Student, String> {
 
 }

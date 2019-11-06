@@ -13,10 +13,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Internship {
 
@@ -43,16 +49,23 @@ public class Internship {
 //	@ManyToOne
 //	@JoinColumn(name = "job_profile_id")
 //	private Job_profile job_profile;
-
+	@NotNull(message = "Please provide a stipend as int")
 	@Column(nullable = false, length = 6)
 	private int stipend;
+	@NotNull(message = "Please provide a ctc as int")
 	@Column(nullable = false, length = 3)
 	private int ctc;
+	@NotNull(message = "Please provide a added_on in format like 2019-02-03 10:08:02")
 	@Column(nullable = false)
-	@CreationTimestamp
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") // 2019-02-03 10:08:02
+	@javax.persistence.Temporal(TemporalType.DATE)
 	private Date added_on;
+	@NotNull(message = "Please provide a start date in format like 2019-02-03 10:08:02")
 	@Column(nullable = false)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") // 2019-02-03 10:08:02
+	@javax.persistence.Temporal(TemporalType.DATE)
 	private Date start_date;
+	@NotNull(message = "Please provide a offer_file as string")
 	@Column(nullable = false, length = 200)
 	private String offer_file;
 	@Column

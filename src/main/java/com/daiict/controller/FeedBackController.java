@@ -20,18 +20,17 @@ public class FeedBackController {
 	FeedBackDao feedBackDao;
 
 	@GetMapping(path = "/feedback")
-	public List<Feedback> getAllFeedBack()
-	{
+	public List<Feedback> getAllFeedBack() {
 		return feedBackDao.getAllFeedback();
 	}
-	
+
 	@PostMapping(path = "/feedback", consumes = { "application/json" })
 	public String addFeedback(@RequestBody String feedback) {
 
 		Object obj = JSONValue.parse(feedback);
 		JSONObject jsonObject = (JSONObject) obj;
-		long long_student_id = (long) jsonObject.get("student_id");
-		int student_id = Integer.parseInt(String.valueOf(long_student_id));
+
+		String student_id = (String) jsonObject.get("student_id");
 		return feedBackDao.addFeedBack(student_id, jsonObject.toString());
 	}
 }

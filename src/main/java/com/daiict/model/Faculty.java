@@ -12,19 +12,26 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Faculty {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, length = 10)
-	private int faculty_id;
+	@NotNull(message = "Please provide a faculty_id as string")
+	@Column
+	private String faculty_id;
+	@NotNull(message = "Please provide a faculty_name as string")
 	@Column(nullable = false, length = 50)
 	private String faculty_name;
+	@NotNull(message = "Please provide a faculty_contact_no as string")
 	@Column(nullable = false, length = 11)
 	private String faculty_contact_no;
+	@NotNull(message = "Please provide a faculty_email_id as string")
 	@Column(nullable = false, length = 25)
 	private String faculty_email_id;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "faculty")
@@ -38,11 +45,11 @@ public class Faculty {
 		this.internship = internship;
 	}
 
-	public int getFaculty_id() {
+	public String getFaculty_id() {
 		return faculty_id;
 	}
 
-	public void setFaculty_id(int faculty_id) {
+	public void setFaculty_id(String faculty_id) {
 		this.faculty_id = faculty_id;
 	}
 

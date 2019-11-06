@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -22,10 +24,12 @@ public class Feedback {
 //	@ManyToOne
 //	@JoinColumn(name = "student_id")
 //	private Student student;
+	@NotNull(message = "Please provide a feedback_title as string")
 	@Column(nullable = false, length = 50)
 	private String feedback_title;
 	@Column(length = 200)
 	private String feedback_descri;
+	@NotNull(message = "Please provide a feedback_file as string")
 	@Column(nullable = false, length = 200)
 	private String feedback_file;
 	@ManyToOne(fetch = FetchType.LAZY)

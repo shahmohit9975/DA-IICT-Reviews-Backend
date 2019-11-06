@@ -2,7 +2,7 @@ package com.daiict.model;
 
 import java.util.Date;
 import java.util.Set;
-
+import java.util.Calendar;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,24 +13,36 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.repository.Temporal;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Course {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(length = 10)
 	private int course_id;
+	@NotNull(message = "Please provide a company_url as string")
 	@Column(nullable = false, length = 20)
 	private String course_name;
+	@NotNull(message = "Please provide a course_duration as date")
 	@Column(nullable = false)
-	@LastModifiedDate
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") // 2019-02-03 10:08:02
+	@javax.persistence.Temporal(TemporalType.DATE)
 	private Date course_duration;
+
+	@NotNull(message = "Please provide a course_strength as int")
 	@Column(nullable = false, length = 5)
 	private int course_strength;
+	@NotNull(message = "Please provide a course_status as a boolean")
 	@Column(nullable = false)
 	private boolean course_status;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "course")
@@ -57,7 +69,15 @@ public class Course {
 	}
 
 	public void setCourse_duration(Date course_duration) {
-		this.course_duration = course_duration;
+		System.out.println("innnn " + new Date());
+		if (course_duration.toString().length() == 0 || course_duration == null) {
+
+			this.course_duration = new Date();
+		} else {
+
+			this.course_duration = course_duration;
+		}
+		System.out.println("out" + this.course_duration);
 	}
 
 	public int getCourse_strength() {

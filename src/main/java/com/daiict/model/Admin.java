@@ -12,28 +12,38 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+
+import com.daiict.exceptionHandle.RecordNotFoundException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Admin {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length = 10)
-	private int admin_id;
+	@NotNull(message = "Please provide a admin id as string")
+	@Column
+	private String admin_id;
+	@NotNull(message = "Please provide a admin_name as string")
 	@Column(nullable = false, length = 20)
 	private String admin_name;
+	@NotNull(message = "Please provide a admin_role as string")
 	@Column(nullable = false, length = 20)
 	private String admin_role;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "admin")
 	private Set<Review> review;
 
-	public int getAdmin_id() {
+	public String getAdmin_id() {
 		return admin_id;
 	}
 
-	public void setAdmin_id(int admin_id) {
+	public void setAdmin_id(String admin_id) throws Exception {
+
 		this.admin_id = admin_id;
 	}
 

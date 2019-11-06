@@ -16,9 +16,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Review {
 	@Id
@@ -26,8 +31,10 @@ public class Review {
 	@Column(unique = true, length = 10)
 	@PrimaryKeyJoinColumn
 	private int review_id;
+	@NotNull(message = "Please provide a review_title as string")
 	@Column(nullable = false, length = 100)
 	private String review_title;
+	@NotNull(message = "Please provide a review_descri as string")
 	@Column(nullable = false, length = 50)
 	private String review_descri;
 	@Column
@@ -36,10 +43,14 @@ public class Review {
 	private String pros;
 	@Column(length = 400)
 	private String cons;
+	@NotNull(message = "Please provide a rating as string like [ONE,TWO...,FIVE]")
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Enum_rating rating;
+	@NotNull(message = "Please provide a review_date in format like 2019-02-03 10:08:02")
 	@Column(nullable = false)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") // 2019-02-03 10:08:02
+	@javax.persistence.Temporal(TemporalType.DATE)
 	private Date review_date;
 //	@ManyToOne
 //	@JoinColumn(name = "admin_id")

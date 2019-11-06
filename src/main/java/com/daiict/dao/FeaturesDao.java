@@ -16,7 +16,7 @@ public class FeaturesDao {
 
 	public String UpdateFeature(int feature_id, Features feature) {
 		Features obj = featureRepo.findById(feature_id)
-				.orElseThrow(() -> new ResourceNotFoundException("id is not valid"));
+				.orElseThrow(() -> new ResourceNotFoundException("feature id " + feature_id + " is not valid"));
 
 		obj.setFeature_name(feature.getFeature_name());
 		obj.setFeature_route(feature.getFeature_route());
@@ -33,8 +33,10 @@ public class FeaturesDao {
 	}
 
 	public String addFeature(Features feature) {
+
 		try {
 			featureRepo.save(feature);
+
 		} catch (Exception e) {
 			return e.getMessage();
 		}

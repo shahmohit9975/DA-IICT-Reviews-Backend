@@ -6,9 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Features {
 
@@ -16,12 +20,16 @@ public class Features {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(length = 10)
 	private int feature_id;
+	@NotNull(message = "Please provide a feature_name as string")
 	@Column(nullable = false, length = 50)
 	private String feature_name;
+	@NotNull(message = "Please provide a feature_route as string")
 	@Column(nullable = false, length = 30)
 	private String feature_route;
+	@NotNull(message = "Please provide a is_student as a boolean")
 	@Column(nullable = false)
 	private boolean is_student;
+	@NotNull(message = "Please provide a is_admin as a boolean")
 	@Column(nullable = false)
 	private boolean is_admin;
 

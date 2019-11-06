@@ -12,9 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Location {
 
@@ -22,6 +25,7 @@ public class Location {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(length = 10)
 	private int location_id;
+	@NotNull(message = "Please provide a location_name as string")
 	@Column(nullable = false, length = 25)
 	private String location_name;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "location")

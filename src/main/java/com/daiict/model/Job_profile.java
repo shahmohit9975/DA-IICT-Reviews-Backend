@@ -12,9 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Job_profile {
 
@@ -22,6 +25,7 @@ public class Job_profile {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(unique = true, length = 10)
 	private int job_profile_id;
+	@NotNull(message = "Please provide a job_profile_name as string")
 	@Column(nullable = false, length = 25)
 	private String job_profile_name;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "job_profile")

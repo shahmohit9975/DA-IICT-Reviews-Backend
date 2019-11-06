@@ -3,6 +3,7 @@ package com.daiict.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.daiict.model.Companies;
@@ -21,6 +22,9 @@ import com.daiict.repository.JobProfileRepo;
 import com.daiict.repository.LocationRepo;
 import com.daiict.repository.StudentRepo;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import net.bytebuddy.implementation.bytecode.Throw;
 
 @Service
 public class InternshipDao {
@@ -40,72 +44,56 @@ public class InternshipDao {
 	@Autowired
 	StudentRepo studentRepo;
 
-	public String updateStatus(int internship_id) {
+	public String updateStatus(int internship_id) throws ResourceNotFoundException {
 
 		if (internShipRepo.existsById(internship_id)) {
 			int id = internship_id;
 			internShipRepo.updateStatus(id);
 			return "updated";
 		}
-		return "internship ID is not valid...";
+
+		throw new ResourceNotFoundException("internship id " + internship_id + "  is not valid");
 	}
 
-	public String addInternship(int company_or_faculty_id, boolean isCompany, int internship_type_id,
-			int job_profile_id, int location_id, int student_id, String string) {
+	public String addInternship(int company_id, String faculty_id, boolean isCompany, int internship_type_id,
+			int job_profile_id, int location_id, String student_id, String string) {
 		Internship internship = null;
 
 		try {
-			internship = new Gson().fromJson(string, Internship.class);
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+			internship = gson.fromJson(string, Internship.class);
 		} catch (Exception e) {
-			System.out.println("========");
+//			System.out.println("========");
 			e.printStackTrace();
 			return e.getMessage();
 		}
-		try {
-			if ((isCompany && companyRepo.findById(company_or_faculty_id) != null)
-					|| facultyRepo.findById(company_or_faculty_id) != null) {
-				if (internShipTypeRepo.findById(internship_type_id) != null) {
 
-					if (jobProfileRepo.findById(job_profile_id) != null) {
+		Internship_type internship_type = internShipTypeRepo.findById(internship_type_id).orElseThrow(
+				() -> new ResourceNotFoundException("internship type id " + internship_type_id + " is not valid"));
+		Job_profile job_profile = jobProfileRepo.findById(job_profile_id)
+				.orElseThrow(() -> new ResourceNotFoundException("Job profile id " + job_profile_id + " is not valid"));
+		Location location = locationRepo.findById(location_id)
+				.orElseThrow(() -> new ResourceNotFoundException("location id " + location_id + " is not valid"));
+		Student student = studentRepo.findById(student_id)
+				.orElseThrow(() -> new ResourceNotFoundException("student id " + student_id + " is not valid"));
 
-						if (locationRepo.findById(location_id) != null) {
-
-							if (studentRepo.findById(student_id) != null) {
-
-								Companies company = null;
-								Faculty faculty = null;
-								if (isCompany) {
-									company = companyRepo.getOne(company_or_faculty_id);
-								} else {
-									faculty = facultyRepo.getOne(company_or_faculty_id);
-								}
-
-								Internship_type internship_type = internShipTypeRepo.getOne(internship_type_id);
-								Job_profile job_profile = jobProfileRepo.getOne(job_profile_id);
-								Location location = locationRepo.getOne(location_id);
-								Student student = studentRepo.getOne(student_id);
-								if (isCompany) {
-									internship.setCompanies(company);
-								} else {
-									internship.setFaculty(faculty);
-								}
-								internship.setInternship_type(internship_type);
-								internship.setJob_profile(job_profile);
-								internship.setLocation(location);
-								internship.setStudent(student);
-
-								internShipRepo.save(internship);
-
-							}
-						}
-					}
-				}
-			}
+		Companies company = null;
+		Faculty faculty = null;
+		if (isCompany) {
+			company = companyRepo.findById(company_id)
+					.orElseThrow(() -> new ResourceNotFoundException("company id " + company_id + " is not valid"));
+			internship.setCompanies(company);
+		} else {
+			faculty = facultyRepo.findById(faculty_id)
+					.orElseThrow(() -> new ResourceNotFoundException("faculty id " + faculty_id + " is not valid"));
+			internship.setFaculty(faculty);
 		}
 
-		catch (Exception e) {
-			return e.getMessage();
-		}
+		internship.setInternship_type(internship_type);
+		internship.setJob_profile(job_profile);
+		internship.setLocation(location);
+		internship.setStudent(student);
+		internShipRepo.save(internship);
 
 		return "added....";
 
