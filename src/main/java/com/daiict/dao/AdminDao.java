@@ -20,9 +20,9 @@ public class AdminDao {
 		return adminRepo.findAll();
 	}
 
-	public String saveAdmin(@Valid Admin admin) {
+	public @Valid String saveAdmin(@Valid Admin admin) {
 		adminRepo.save(admin);
-		return "admin added";
+		return "added";
 
 	}
 

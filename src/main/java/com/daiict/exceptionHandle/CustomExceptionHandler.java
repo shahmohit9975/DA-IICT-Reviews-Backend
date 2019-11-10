@@ -27,8 +27,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 		List<String> details = new ArrayList<>();
 		details.add(ex.getLocalizedMessage());
-		ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, details);
+		ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, details, HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(InvalidInputException.class)
+	public final ResponseEntity<ErrorResponse> invalidInputException(InvalidInputException ex, WebRequest request) {
+		List<String> details = new ArrayList<>();
+		details.add(ex.getLocalizedMessage());
+		ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, details, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(MissingHeaderInfoException.class)
@@ -36,7 +44,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 		List<String> details = new ArrayList<>();
 		details.add(ex.getLocalizedMessage());
-		ErrorResponse error = new ErrorResponse(BAD_REQUEST, details);
+		ErrorResponse error = new ErrorResponse(BAD_REQUEST, details, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 

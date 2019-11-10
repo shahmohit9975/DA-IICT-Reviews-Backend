@@ -6,6 +6,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,14 +24,15 @@ public class CourseController {
 	CourseDao courseDao;
 
 	@GetMapping(path = "/course")
-	public List<Course> getAllCourse() {
+	public ResponseEntity<List<Course>> getAllCourse() {
 
-		return courseDao.getCourse();
+		List<Course> course = courseDao.getCourse();
+		return new ResponseEntity<List<Course>>(course, HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/course")
-	public String saveCourse(@Valid @RequestBody Course course) {
-
-		return courseDao.saveCourse(course);
+	public ResponseEntity<?> saveCourse(@Valid @RequestBody Course course) {
+		String msg = courseDao.saveCourse(course);
+		return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 	}
 }

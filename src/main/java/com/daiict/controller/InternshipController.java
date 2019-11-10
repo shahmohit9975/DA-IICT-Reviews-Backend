@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daiict.dao.InternshipDao;
+import com.daiict.model.Admin;
+import com.daiict.model.Course;
 import com.daiict.model.Internship;
 import com.daiict.model.Review;
 import com.daiict.repository.InternShipRepo;
@@ -26,19 +30,14 @@ public class InternshipController {
 	InternshipDao internshpDao;
 
 	@GetMapping(path = "/internship", produces = { "application/json" })
-	public @PostMapping List<Internship> getAllInternship() {
+	public ResponseEntity<List<Internship>> getAllInternship() {
 
-		return internshpDao.getAllIntenship();
-	}
-
-	@PutMapping(path = "/internship/{internship_id}")
-	public String updateInternshipApprovedStatus(@PathVariable(name = "internship_id") int internship_id) {
-
-		return internshpDao.updateStatus(internship_id);
+		List<Internship> internship = internshpDao.getAllIntenship();
+		return new ResponseEntity<List<Internship>>(internship, HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/internship", consumes = { "application/json" })
-	public String addInternship(@Valid @RequestBody String internship) {
+	public ResponseEntity<?> addInternship(@Valid @RequestBody String internship) {
 
 		Object obj = JSONValue.parse(internship);
 		JSONObject jsonObject = (JSONObject) obj;
@@ -67,10 +66,16 @@ public class InternshipController {
 
 		boolean isCompany = faculty_id.length() == 0 || faculty_id == null ? true : false;
 
-//		System.out.println(jsonObject);
-		System.out.println("=============");
-		return internshpDao.addInternship(company_id, faculty_id, isCompany, internship_type_id, job_profile_id,
+		String msg = internshpDao.addInternship(company_id, faculty_id, isCompany, internship_type_id, job_profile_id,
 				location_id, student_id, jsonObject.toString());
+		return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 
+	}
+
+	@PutMapping(path = "/internship/{internship_id}")
+	public ResponseEntity<?> updateInternshipApprovedStatus(@PathVariable(name = "internship_id") int internship_id) {
+
+		String msg = internshpDao.updateStatus(internship_id);
+		return new ResponseEntity<String>(msg, HttpStatus.OK);
 	}
 }
