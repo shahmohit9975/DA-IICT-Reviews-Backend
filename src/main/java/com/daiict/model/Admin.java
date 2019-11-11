@@ -17,12 +17,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.daiict.exceptionHandle.RecordNotFoundException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
+@CrossOrigin
 public class Admin {
 
 	@Id

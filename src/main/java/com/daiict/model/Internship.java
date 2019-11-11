@@ -19,9 +19,10 @@ import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+@CrossOrigin
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Internship {

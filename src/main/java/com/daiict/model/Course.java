@@ -19,11 +19,13 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.repository.Temporal;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@CrossOrigin
 @Entity
 public class Course {
 	@Id

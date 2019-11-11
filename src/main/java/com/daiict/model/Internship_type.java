@@ -15,8 +15,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@CrossOrigin
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class Internship_type {
