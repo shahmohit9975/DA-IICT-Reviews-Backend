@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/classes:target/dependency/* DAIICT-Internship-Review-Syatem-API
+web: java $JAVA_OPTS -cp target/classes:target/dependency/* DAIICT-Internship-Review-Syatem-API.jar
